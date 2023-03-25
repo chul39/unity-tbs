@@ -31,9 +31,9 @@ public class ShootAction : BaseAction
     [SerializeField] private int maxShootDistance = 7;
     [SerializeField] private int damageAmount = 40;
     [SerializeField] private float rotateSpeed = 10f;
-    [SerializeField] private float preShootingStateTime = 1f;
-    [SerializeField] private float shootingStateTime = 0.1f;
-    [SerializeField] private float postShootingStateTime = 0.5f;
+    private float preShootingStateTime = 1f;
+    private float shootingStateTime = 0.1f;
+    private float postShootingStateTime = 0.5f;
 
     private void Update()
     {
@@ -118,7 +118,7 @@ public class ShootAction : BaseAction
                 if (testDistance > maxShootDistance) continue;
 
                 if (!LevelGrid.Instance.HasAnyUnitOnGridPosition(testGridPosition)) continue;
-                Unit targetUnit = LevelGrid.Instance.GetUnitOnGridPosition(testGridPosition);
+                Unit targetUnit = LevelGrid.Instance.GetUnitAtGridPosition(testGridPosition);
                 if (targetUnit.IsEnemy() == unit.IsEnemy()) continue;
 
                 Vector3 unitWorldPosition = LevelGrid.Instance.GetWorldPosition(unitGridPosition);
@@ -139,7 +139,7 @@ public class ShootAction : BaseAction
 
     public override void TakeAction(GridPosition gridPosition, Action onActionComplete)
     {
-        targetUnit = LevelGrid.Instance.GetUnitOnGridPosition(gridPosition);
+        targetUnit = LevelGrid.Instance.GetUnitAtGridPosition(gridPosition);
         state = State.PreShooting;
         stateTimer = preShootingStateTime;
         canShoot = true;
@@ -163,7 +163,7 @@ public class ShootAction : BaseAction
 
     public override EnemyAIAction GetEnemyAIAction(GridPosition gridPosition)
     {
-        Unit targetUnit = LevelGrid.Instance.GetUnitOnGridPosition(gridPosition);
+        Unit targetUnit = LevelGrid.Instance.GetUnitAtGridPosition(gridPosition);
         return new EnemyAIAction 
         {
             gridPosition = gridPosition,
